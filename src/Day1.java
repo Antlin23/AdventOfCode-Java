@@ -5,10 +5,6 @@ import static java.lang.Integer.parseInt;
 
 public class Day1 {
     public void Run(String puzzleInput){
-        //Make the list two separate lists and check the lowest number, after the lowest number is taken we remove it from the string
-
-        int result = 0;
-
         var inputWithShortenedSpaces = puzzleInput.replaceAll(" {3}", " ");
 
         var splittedString = inputWithShortenedSpaces.split("\n");
@@ -28,24 +24,43 @@ public class Day1 {
             var secondNumber = s.split(" ")[1];
             rightList.add(parseInt(secondNumber));
         }
+        PartOne(leftList, rightList, splittedString);
+
+        PartTwo(leftList, rightList);
+    }
+
+    //Check the lowest number, after the lowest number is taken we remove it from the string
+    public void PartOne(List<Integer> leftList, List<Integer> rightList, String[] splittedString){
+        // Make copies so we don't modify the original lists
+        List<Integer> sortedLeft = new ArrayList<>(leftList);
+        List<Integer> sortedRight = new ArrayList<>(rightList);
+
+        var result = 0;
 
         //sorts in the right order
-        Collections.sort(leftList);
-
-        Collections.sort(rightList);
+        Collections.sort(sortedLeft);
+        Collections.sort(sortedRight);
 
         //checks for lowest number, saves it and removes it from the list
         for (int i = 0; i < splittedString.length; i++){
-            //calculates the distance between the two numbers
-            var distance = leftList.getFirst() - rightList.getFirst();
-
-            //removes the used numbers
-            leftList.removeFirst();
-            rightList.removeFirst();
-
-            result = result + Math.abs(distance);
+            int distance = Math.abs(sortedLeft.get(i) - sortedRight.get(i));
+            result += distance;
         }
 
-        System.out.println("Result: " + result);
+        System.out.println("Result part one: " + result);
+        //Part 1 answer: 2756096
+    }
+
+    public void PartTwo(List<Integer> leftList, List<Integer> rightList){
+        var partTwoResult = 0;
+        for (Integer integer : leftList) {
+            for (Integer value : rightList) {
+                if (Objects.equals(integer, value)) {
+                    partTwoResult += integer;
+                }
+            }
+        }
+        System.out.println("Result part two: " + partTwoResult);
+        //Part 2 answer: 23117829
     }
 }
